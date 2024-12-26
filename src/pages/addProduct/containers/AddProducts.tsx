@@ -20,6 +20,7 @@ const AddProducts = () => {
         validationSchema: DescriptionSchema,
         onSubmit: () => {
             if(JSON.stringify(errors) === "{}") setCurrentForm( prevVal => prevVal+1)
+            else return 
         }
       })
 
