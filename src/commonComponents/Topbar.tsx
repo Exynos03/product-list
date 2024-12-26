@@ -24,8 +24,9 @@ const Topbar: React.FC<TopbarProps> = ({ heading, btn1Text, btn2Text, btn1Naviga
               {btn1Text}
             </button>
             <button
+              type='submit'
               className="bg-[#1F8CD0] w-1/2 rounded-[8px] p-2 pl-4 pr-4 font-['Work_Sans'] text-[16px] font-semibold leading-[24px] text-[#FFFFFF] cursor-pointer"
-              onClick={btn2Navigation}
+              onClick={()=>btn2Navigation()}
             >
               {btn2Text}
             </button>

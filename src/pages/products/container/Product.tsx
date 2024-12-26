@@ -12,18 +12,18 @@ const Dummy = () => {
 
     return (
         <div className='flex w-full'>
-            {showCategoryModal && <MonoInputModal setShowModal={setShowCategoryModal} />}
-            <Sidebar />
-            <div className='flex flex-col justify-start align-middle w-4/5 cr:w-4/6 h-screen'>
-                <Topbar
-                    heading="Product"
-                    btn1Text= "Add Category"
-                    btn2Text="Add Product"
-                    btn1Navigation= {() => setShowCategoryModal(true)}
-                    btn2Navigation= {() => navigate('/Products/add-product')}
-                />
-                <ProductList />
-            </div>
+                {showCategoryModal && <MonoInputModal setShowModal={setShowCategoryModal} />}
+                <Sidebar />
+                <div className='flex flex-col justify-start align-middle w-4/5 cr:w-4/6 h-screen'>
+                    <Topbar
+                        heading="Product"
+                        btn1Text= "Add Category"
+                        btn2Text="Add Product"
+                        btn1Navigation= {() => setShowCategoryModal(true)}
+                        btn2Navigation= {() => navigate('/Products/add-product')}
+                    />
+                    <ProductList />
+                </div>
         </div>
     )
 }

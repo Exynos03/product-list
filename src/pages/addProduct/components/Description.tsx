@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { LuImageUp } from "react-icons/lu";
 
-const Description = () => {
+const Description = ({values, errors, handleChange}) => {
   const [selectedOption, setSelectedOption] = useState<string>("");
   const options = JSON.parse(localStorage.getItem('catList') ?? '[]') as string[]
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedOption(event.target.value as string);
-  };
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSelectedOption(e.target.value as string);
+  // };
 
-  const handleImageUpload = (event: React.ChangeEvent<{ value: unknown }>) => {
+  // console.log(values)
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
 
   }
 
@@ -21,6 +23,9 @@ const Description = () => {
       <label className="flex flex-col gap-1 w-full font-['Work_Sans'] text-[14px] font-normal leading-[16.42px] text-left">
         Product name*
         <input 
+          name="product_name"
+          value={values.product_name}
+          onChange={handleChange}
           placeholder="Enter product name"
           className="border border-[#0000002E] rounded-[8px] p-2 font-['Work_Sans'] text-[14px] font-normal leading-[16.42px] outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -31,12 +36,13 @@ const Description = () => {
         Category*
         <div className="relative">
           <select
-            value={selectedOption}
+            name="category"
+            value={values.category}
             onChange={handleChange}
             className="appearance-none border border-[#0000002E] p-2 rounded-[8px]  w-full font-['Work_Sans'] text-[14px] font-normal leading-[16.42px] bg-white outline-none "
           >
             <option  value="" disabled>
-              <span className="text-gray-500 font-['Work_Sans']">Select a category</span>
+              Select a category
             </option >
             {options.map((option, idx) => (
               <option  key={idx} value={option} className="font-['Work_Sans'] cursor-pointer">
@@ -67,6 +73,9 @@ const Description = () => {
       <label className="flex flex-col gap-1 w-full font-['Work_Sans'] text-[14px] font-normal leading-[16.42px] text-left">
         Brand name*
         <input 
+          name="brand_name"
+          onChange={handleChange}
+          value={values.brand_name}
           placeholder="Enter brand name"
           className="border border-[#0000002E] rounded-[8px] p-2 font-['Work_Sans'] text-[14px] font-normal leading-[16.42px] outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -78,6 +87,7 @@ const Description = () => {
       </div>
 
       <input 
+        name="img_upd"
         type="file"
         className="hidden"
         id="img_upd"
