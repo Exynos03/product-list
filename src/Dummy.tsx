@@ -1,21 +1,22 @@
-import { useLocation } from 'react-router-dom'
-import Sidebar from './commonComponents/Sidebar'
-import Topbar from './commonComponents/Topbar'
+import { useLocation } from "react-router-dom";
+import Sidebar from "./commonComponents/Sidebar";
+import Topbar from "./commonComponents/Topbar";
 
 const Dummy = () => {
-    const location = useLocation()
+  const location = useLocation();
 
-    return (
-        <div className='flex w-full'>
-            <Sidebar />
-            <div className='flex flex-col justify-start align-middle w-4/5 cr:w-4/6 h-screen'>
-                <Topbar
-                    heading={location.pathname.slice(1)}
-                />
-                <h1>Page not found, as assigment is about product page. Go to Products page</h1>
-            </div>
-        </div>
-    )
-}
+  return (
+    <div className="flex w-full">
+      <Sidebar />
+      <div className="flex flex-col justify-start align-middle w-4/5 cr:w-4/6 h-screen">
+        <Topbar heading={location.pathname.slice(1)} />
+        <h1>
+          Page not found, as assigment is about product page. Go to Products
+          page
+        </h1>
+      </div>
+    </div>
+  );
+};
 
-export default Dummy
+export default Dummy;

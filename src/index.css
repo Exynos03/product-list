@@ -3,22 +3,43 @@
 @tailwind utilities;
 
 @layer components {
-    .scrollbar-thin {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
-    }
-  
-    .scrollbar-thin::-webkit-scrollbar {
-      height: 8px;
-    }
-  
-    .scrollbar-thin::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0.3);
-      border-radius: 10px;
-    }
-  
-    .scrollbar-thin::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.1);
-    }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
   }
-  
+
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* For Chrome, Edge, and Safari */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Remove padding from MuiChipsInput */
+.MuiTextField-root {
+  display: none;
+}
+
+.MuiChipsInput-Input {
+  padding: 0 !important;
+  margin: 0 !important;
+}
