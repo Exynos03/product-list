@@ -1,10 +1,9 @@
-import { useState } from "react";
 
 const ProductList = () => {
   const catList = localStorage.getItem("catList");
   const parsedCatList: string[] = catList ? JSON.parse(catList) : [];
-  const [categoryList, setCategoryList] = useState(parsedCatList || []);
-  const [productList, setProductList] = useState([
+  const categoryList = (parsedCatList || [])
+  const productList= ([
     {
       productName: "Nike Air Force",
       productImg:

@@ -1,8 +1,8 @@
 interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  jsonData: object;
-}
+    isOpen: boolean;
+    onClose: (isOpen: boolean) => void; 
+    jsonData: object;
+  }
 
 const JsonModal: React.FC<ModalProps> = ({ isOpen, onClose, jsonData }) => {
   if (!isOpen) return null;

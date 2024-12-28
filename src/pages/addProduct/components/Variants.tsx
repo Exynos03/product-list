@@ -3,28 +3,21 @@ import { MuiChipsInput } from "mui-chips-input";
 import React from "react";
 import { FaPlus } from "react-icons/fa";
 
-interface VariantItem {
-  id: number;
-  field1: string; // Single input field
-  field2: string[]; // Array of strings for the chips input
-}
 
-interface VariantsProps {
-  data: VariantItem[];
-  handleFieldChange: (
-    id: number,
-    fieldName: keyof VariantItem,
-    value: string | string[],
-  ) => void;
+interface VariantProps {
+  data: {
+    id: number;
+    field1: string;
+    field2: string[];
+  }[];
+  handleFieldChange: (id: number, fieldName: "field1" | "field2", value: string | string[], index?: number | null) => void;
   addNewField: () => void;
   removeField: (id: number) => void;
-  variantErrors: { [key: number]: string }; // Errors by ID
-  setVariantErrors: React.Dispatch<
-    React.SetStateAction<{ [key: number]: string }>
-  >;
+  variantErrors: { [key: number]: string };
+  setVariantErrors: React.Dispatch<React.SetStateAction<{ [key: number]: string }>>;
 }
 
-const Variants: React.FC<VariantsProps> = ({
+const Variants: React.FC<VariantProps> = ({
   data,
   handleFieldChange,
   addNewField,
@@ -136,7 +129,7 @@ const Variants: React.FC<VariantsProps> = ({
         <FaPlus color="#1F8CD0" size={16} />
         <button
           type="button"
-          className="font-['Work_Sans'] text-[#1F8CD0] text-14px font-medium text-left "
+          className="font-['Work_Sans'] text-[#1F8CD0] text-[14px] font-medium text-left"
           onClick={addNewField}
         >
           Add Option

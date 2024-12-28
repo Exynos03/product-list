@@ -1,5 +1,3 @@
-import React from "react";
-
 interface PriceInfoProps {
   values: {
     price: string;
@@ -12,9 +10,6 @@ interface PriceInfoProps {
   };
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setFieldValue: (field: string, value: any) => void;
-  setErrors: React.Dispatch<
-    React.SetStateAction<{ [key: string]: string | undefined }>
-  >;
 }
 
 const PriceInfo: React.FC<PriceInfoProps> = ({
@@ -22,7 +17,6 @@ const PriceInfo: React.FC<PriceInfoProps> = ({
   errors,
   handleChange,
   setFieldValue,
-  setErrors,
 }) => {
   return (
     <form className="w-full border mt-6 shadow-[0px_0px_20px_-2px_rgba(0,0,0,0.1)] p-5 rounded-[12px] flex flex-col gap-4 justify-start align-middle">
@@ -39,7 +33,7 @@ const PriceInfo: React.FC<PriceInfoProps> = ({
           value={values.price}
           onChange={(e) => {
             handleChange(e);
-            setErrors((prev) => ({ ...prev, price: undefined }));
+            // handle error clearing here if needed
           }}
           placeholder="Enter price amount"
           className={`border rounded-[8px] p-2.5 font-['Work_Sans'] text-[14px] font-normal leading-[16.42px] outline-none ${
@@ -63,7 +57,7 @@ const PriceInfo: React.FC<PriceInfoProps> = ({
             value={values.discount}
             onChange={(e) => {
               handleChange(e);
-              setErrors((prev) => ({ ...prev, discount: undefined }));
+              // handle error clearing here if needed
             }}
             placeholder="Enter discount amount"
             className={`border rounded-[8px] p-2.5 font-['Work_Sans'] text-[14px] font-normal leading-[16.42px] outline-none w-full ${

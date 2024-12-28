@@ -1,5 +1,7 @@
 import { Stack, Switch, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+// Styled Switch component
 export const StyledSwitch = styled(Switch)(({ theme }) => ({
   width: 42,
   height: 24,
@@ -45,8 +47,15 @@ export const StyledSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const AntSwitch = (props) => {
-  const { text, ...rest } = props;
+// Type definition for props
+interface AntSwitchProps {
+  text?: string;
+  // Include the rest of the Switch props here (optional)
+  [key: string]: any;
+}
+
+// AntSwitch component with type
+const AntSwitch: React.FC<AntSwitchProps> = ({ text, ...rest }) => {
   return (
     <Stack
       direction="row"

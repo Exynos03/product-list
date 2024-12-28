@@ -39,16 +39,16 @@ const AddProducts: React.FC = () => {
   const parsedCatList: string[] = catList ? JSON.parse(catList) : [];
   const [currentForm, setCurrentForm] = useState<number>(0);
   const [showJsonModal, setShowJsonModal] = useState<boolean>(false);
-  const [productJson, setProductJson] = useState({});
+  const [productJson, setProductJson] = useState<Record<string, any>>({});
   const [image, setImage] = useState<File | null>(null);
   const [imageName, setImageName] = useState<string>("");
-  const [variantObject, setVariantObject] = useState<Item[]>([
-    { id: 1, field1: "", field2: [] },
-  ]);
+  const [variantObject, setVariantObject] = useState<Item[]>([{
+    id: 1,
+    field1: "",
+    field2: []
+  }]);
   const [combinationObject, setCombinationObject] = useState<Combination[]>([]);
-  const [variantErrors, setVariantErrors] = useState<{ [key: number]: string }>(
-    {},
-  );
+  const [variantErrors, setVariantErrors] = useState<Record<number, string>>({});
   const [combinationError, setCombinationError] = useState<
     { sku?: string; quantity?: string }[]
   >([]);
@@ -66,13 +66,11 @@ const AddProducts: React.FC = () => {
 
   const combineArrays = (...arrays: string[][]): string[] => {
     return arrays.reduce<string[]>(
-      (acc, currArray, index) => {
+      (acc, currArray) => {
         const result: string[] = [];
         acc.forEach((accItem) => {
           currArray.forEach((currItem) => {
-            result.push(
-              index === 0 ? `${accItem}${currItem}` : `${accItem}/${currItem}`,
-            );
+            result.push(`${accItem}/${currItem}`);
           });
         });
         return result;
@@ -84,8 +82,8 @@ const AddProducts: React.FC = () => {
   const handleFieldChange = (
     id: number,
     fieldName: keyof Item,
-    value: string,
-    index: number | null = null,
+    value: string | string[],
+    index: number | null = null
   ): void => {
     setVariantObject((prevData) =>
       prevData.map((item) =>
@@ -93,14 +91,12 @@ const AddProducts: React.FC = () => {
           ? {
               ...item,
               [fieldName]:
-                index !== null
-                  ? item[fieldName]?.map((field, i) =>
-                      i === index ? value : field,
-                    )
+                index !== null && Array.isArray(item[fieldName])
+                  ? item[fieldName].map((field, i) => (i === index ? value : field))
                   : value,
             }
-          : item,
-      ),
+          : item
+      )
     );
   };
 
@@ -123,34 +119,20 @@ const AddProducts: React.FC = () => {
     useFormik<FormValues>({
       initialValues,
       validationSchema: FormDataSchema,
-      onSubmit: () => {
-        console.log(
-          !(
-            "product_name" in errors ||
-            "category" in errors ||
-            "brand_name" in errors
-          ),
-        );
-      },
+      onSubmit: () => {},
     });
 
   const handleDescriptionSaveClick = () => {
-    if (
-      values.product_name.length > 0 &&
-      values.category.length > 0 &&
-      values.brand_name.length > 0 &&
-      image
-    ) {
+    if (values.product_name && values.category && values.brand_name && image) {
       setCurrentForm((prevVal) => prevVal + 1);
       setErrors({});
     } else {
       toast.error("Please fill out all fields to move to the next page");
-      return;
     }
   };
 
   const handleVariantSaveClick = () => {
-    const newVariantErrors: { [key: number]: string } = {};
+    const newVariantErrors: Record<number, string> = {};
 
     variantObject.forEach((item) => {
       if (!item.field1.trim()) {
@@ -162,7 +144,7 @@ const AddProducts: React.FC = () => {
 
     if (Object.keys(newVariantErrors).length === 0) {
       const combinationArray = combineArrays(
-        ...variantObject.map((item) => item.field2),
+        ...variantObject.map((item) => item.field2)
       );
       const desiredArr = combinationArray.map((variant) => ({
         name: variant,
@@ -199,10 +181,7 @@ const AddProducts: React.FC = () => {
       }
 
       const skuIndexes = skuOccurrences[combination.sku.trim()] || [];
-      if (
-        skuIndexes.length > 1 &&
-        skuIndexes[skuIndexes.length - 1] === index
-      ) {
+      if (skuIndexes.length > 1 && skuIndexes.includes(index)) {
         error.sku = "Duplicate SKU";
       }
 
@@ -222,22 +201,18 @@ const AddProducts: React.FC = () => {
 
   const handlePriceSectionSaveClick = () => {
     if (Number(values.price) > 0) {
-      const category = parsedCatList.map((item) => ({
-        id: 1,
-        name: item,
-      }));
+      const category = parsedCatList.map((item) => ({ id: 1, name: item }));
+      
+      // Explicitly define the type for `acc` as an object with string keys
       const product = {
         product: {
           name: values.product_name,
           category: values.category,
           brand: values.brand_name,
           image: image ? image.name : "",
-          variants: variantObject.map((variant) => ({
-            name: variant.field1,
-            values: variant.field2,
-          })),
-          combinations: combinationObject.reduce((acc, combination, index) => {
-            const key = String.fromCharCode(97 + index);
+          variants: variantObject.map((variant) => ({ name: variant.field1, values: variant.field2 })),
+          combinations: combinationObject.reduce((acc: { [key: string]: any }, combination, index) => {
+            const key = String.fromCharCode(97 + index);  // 'a', 'b', 'c', etc.
             acc[key] = {
               name: combination.name,
               sku: combination.sku,
@@ -247,23 +222,19 @@ const AddProducts: React.FC = () => {
             return acc;
           }, {}),
           priceInr: parseFloat(values.price),
-          discount: {
-            method: values.method,
-            value: parseFloat(values.discount),
-          },
+          discount: { method: values.method, value: parseFloat(values.discount) },
         },
         categories: category,
       };
-      console.log(category);
+  
       setProductJson(product);
       setShowJsonModal(true);
-      console.log(product);
       toast.success("Please check console. Output is printed on console");
     } else {
       toast.error("Please fill out Price to add the product");
-      return;
     }
   };
+  
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -280,7 +251,7 @@ const AddProducts: React.FC = () => {
       handleChange={handleChange}
       handleImageUpload={handleImageUpload}
       imageName={imageName}
-    />,
+    />, 
     <Variants
       data={variantObject}
       handleFieldChange={handleFieldChange}
@@ -288,14 +259,14 @@ const AddProducts: React.FC = () => {
       removeField={removeField}
       variantErrors={variantErrors}
       setVariantErrors={setVariantErrors}
-    />,
+    />, 
     <Combinations
       combinations={combinationObject}
       handleChange={(index, field, value) =>
         setCombinationObject((prev) =>
           prev.map((combination, i) =>
-            i === index ? { ...combination, [field]: value } : combination,
-          ),
+            i === index ? { ...combination, [field]: value } : combination
+          )
         )
       }
       errors={combinationError}
@@ -322,7 +293,7 @@ const AddProducts: React.FC = () => {
       {showJsonModal && (
         <JsonModal
           isOpen={showJsonModal}
-          onClose={setShowJsonModal}
+          onClose={() => setShowJsonModal(false)}
           jsonData={productJson}
         />
       )}
