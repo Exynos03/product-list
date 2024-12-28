@@ -1,6 +1,7 @@
 import { RiDeleteBinLine } from "react-icons/ri";
 import { MuiChipsInput } from "mui-chips-input";
 import React from "react";
+import { FaPlus } from "react-icons/fa";
 
 interface VariantItem {
   id: number;
@@ -131,13 +132,14 @@ const Variants: React.FC<VariantsProps> = ({
       })}
 
       {/* Add New Field Button */}
-      <div className="flex justify-start">
+      <div className="flex justify-start items-center align-middle py-2 px-4 mt-4 gap-2 cursor-pointer">
+        <FaPlus color="#1F8CD0" size={16}/>
         <button
           type="button"
-          className="text-white bg-[#1A73E8] rounded-[8px] py-2 px-4 mt-4"
+          className="font-['Work_Sans'] text-[#1F8CD0] text-14px font-medium text-left "
           onClick={addNewField}
         >
-          Add New Variant
+          Add Option
         </button>
       </div>
     </form>
