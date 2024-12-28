@@ -36,10 +36,10 @@ interface FormValues {
 
 const AddProducts: React.FC = () => {
   const catList = localStorage.getItem("catList");
-  const parsedCatList: string[] = catList ? JSON.parse(catList) : []; 
+  const parsedCatList: string[] = catList ? JSON.parse(catList) : [];
   const [currentForm, setCurrentForm] = useState<number>(0);
-  const[showJsonModal, setShowJsonModal] = useState<boolean>(false)
-  const[productJson, setProductJson] = useState({})
+  const [showJsonModal, setShowJsonModal] = useState<boolean>(false);
+  const [productJson, setProductJson] = useState({});
   const [image, setImage] = useState<File | null>(null);
   const [imageName, setImageName] = useState<string>("");
   const [variantObject, setVariantObject] = useState<Item[]>([
@@ -136,18 +136,15 @@ const AddProducts: React.FC = () => {
 
   const handleDescriptionSaveClick = () => {
     if (
-      (
-        values.product_name.length > 0 &&
-        values.category.length > 0 &&
-        values.brand_name.length > 0 &&
-        image
-      )
+      values.product_name.length > 0 &&
+      values.category.length > 0 &&
+      values.brand_name.length > 0 &&
+      image
     ) {
       setCurrentForm((prevVal) => prevVal + 1);
       setErrors({});
-    }
-    else {
-      toast.error("Please fill out all fields to move to the next page")
+    } else {
+      toast.error("Please fill out all fields to move to the next page");
       return;
     }
   };
@@ -224,46 +221,46 @@ const AddProducts: React.FC = () => {
   };
 
   const handlePriceSectionSaveClick = () => {
-    if ((Number(values.price) > 0 )) {
+    if (Number(values.price) > 0) {
       const category = parsedCatList.map((item) => ({
-        id: 1, 
+        id: 1,
         name: item,
       }));
-      const product = { 
-        product :{
-        name: values.product_name,
-        category: values.category,
-        brand: values.brand_name,
-        image: image ? image.name : "",
-        variants: variantObject.map((variant) => ({
-          name: variant.field1,
-          values: variant.field2,
-        })),
-        combinations: combinationObject.reduce((acc, combination, index) => {
-          const key = String.fromCharCode(97 + index);
-          acc[key] = {
-            name: combination.name,
-            sku: combination.sku,
-            quantity: combination.quantity,
-            inStock: combination.inStock,
-          };
-          return acc;
-        }, {}),
-        priceInr: parseFloat(values.price),
-        discount: {
-          method: values.method,
-          value: parseFloat(values.discount),
+      const product = {
+        product: {
+          name: values.product_name,
+          category: values.category,
+          brand: values.brand_name,
+          image: image ? image.name : "",
+          variants: variantObject.map((variant) => ({
+            name: variant.field1,
+            values: variant.field2,
+          })),
+          combinations: combinationObject.reduce((acc, combination, index) => {
+            const key = String.fromCharCode(97 + index);
+            acc[key] = {
+              name: combination.name,
+              sku: combination.sku,
+              quantity: combination.quantity,
+              inStock: combination.inStock,
+            };
+            return acc;
+          }, {}),
+          priceInr: parseFloat(values.price),
+          discount: {
+            method: values.method,
+            value: parseFloat(values.discount),
+          },
         },
-      },
-      categories : category
-    }
-      console.log(category)
-      setProductJson(product)
-      setShowJsonModal(true)
+        categories: category,
+      };
+      console.log(category);
+      setProductJson(product);
+      setShowJsonModal(true);
       console.log(product);
       toast.success("Please check console. Output is printed on console");
     } else {
-      toast.error("Please fill out Price to add the product")
+      toast.error("Please fill out Price to add the product");
       return;
     }
   };
@@ -322,7 +319,13 @@ const AddProducts: React.FC = () => {
   return (
     <section className="flex w-full">
       <Sidebar />
-      { showJsonModal && <JsonModal isOpen={showJsonModal} onClose={setShowJsonModal} jsonData ={productJson}/>}
+      {showJsonModal && (
+        <JsonModal
+          isOpen={showJsonModal}
+          onClose={setShowJsonModal}
+          jsonData={productJson}
+        />
+      )}
       <section className="flex flex-col justify-start align-middle w-4/5 cr:w-4/6 h-screen">
         <Topbar
           heading="Add Product"

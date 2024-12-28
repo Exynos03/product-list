@@ -133,7 +133,7 @@ const Variants: React.FC<VariantsProps> = ({
 
       {/* Add New Field Button */}
       <div className="flex justify-start items-center align-middle py-2 px-4 mt-4 gap-2 cursor-pointer">
-        <FaPlus color="#1F8CD0" size={16}/>
+        <FaPlus color="#1F8CD0" size={16} />
         <button
           type="button"
           className="font-['Work_Sans'] text-[#1F8CD0] text-14px font-medium text-left "
