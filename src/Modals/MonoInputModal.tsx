@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 interface MonoInputModalProps {
   setShowModal: (show: boolean) => void; // Prop type for setShowModal
@@ -7,6 +8,7 @@ interface MonoInputModalProps {
 
 const MonoInputModal: React.FC<MonoInputModalProps> = ({ setShowModal }) => {
   const [categoryName, setCategoryName] = useState<string>("");
+  const navigate = useNavigate()
 
   const handleSaveCategoryBtn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ const MonoInputModal: React.FC<MonoInputModalProps> = ({ setShowModal }) => {
       localStorage.setItem("catList", JSON.stringify(catList));
       toast.success("Category added successfully!");
       setTimeout(() => {
-        window.location.reload();
+        navigate('/Products')
         setShowModal(false);
       }, 1500);
     } catch (error) {

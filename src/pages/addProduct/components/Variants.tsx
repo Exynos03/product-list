@@ -2,38 +2,37 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { MuiChipsInput } from "mui-chips-input";
 import React from "react";
 import { FaPlus } from "react-icons/fa";
+import { useFieldArray, useFormContext } from "react-hook-form";
+
+const Variants: React.FC = () => {
+  const {
+    control,
+    register,
+    setValue,
+    setError,
+    clearErrors,
+    watch,
+    formState: { errors },
+  } = useFormContext();
 
 
-interface VariantProps {
-  data: {
-    id: number;
-    field1: string;
-    field2: string[];
-  }[];
-  handleFieldChange: (id: number, fieldName: "field1" | "field2", value: string | string[], index?: number | null) => void;
-  addNewField: () => void;
-  removeField: (id: number) => void;
-  variantErrors: { [key: number]: string };
-  setVariantErrors: React.Dispatch<React.SetStateAction<{ [key: number]: string }>>;
-}
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "variants", // Matches the name in the schema
+  });
 
-const Variants: React.FC<VariantProps> = ({
-  data,
-  handleFieldChange,
-  addNewField,
-  removeField,
-  variantErrors,
-  setVariantErrors,
-}) => {
+  // Watch for live form state updates
+  const variants = watch("variants");
+
   return (
     <form className="w-full border mt-6 shadow-[0px_0px_20px_-2px_rgba(0,0,0,0.1)] p-5 rounded-[12px] flex flex-col gap-5 justify-start align-middle">
       <p className="font-['Work_Sans'] text-[16px] font-semibold leading-[18.77px] text-left">
         Variants
       </p>
 
-      {data.map((item) => {
-        const field1Error = variantErrors[item.id]?.includes("Option");
-        const field2Error = variantErrors[item.id]?.includes("Values");
+      {fields.map((item, index) => {
+        const field1Error = errors?.variants?.[index]?.field1;
+        const field2Error = errors?.variants?.[index]?.field2;
 
         return (
           <div
@@ -45,23 +44,17 @@ const Variants: React.FC<VariantProps> = ({
               Option*
               <div className="relative w-full">
                 <input
-                  name="option"
-                  value={item.field1}
-                  onChange={(e) => {
-                    handleFieldChange(item.id, "field1", e.target.value);
-                    setVariantErrors((prev) => {
-                      const { [item.id]: removed, ...rest } = prev; // Clear errors for the current field
-                      return rest;
-                    });
-                  }}
+                  {...register(`variants[${index}].field1`)}
+                  defaultValue={item.field1} // Important to set default value for useFieldArray
                   placeholder="Enter the option"
                   className={`border ${
                     field1Error ? "border-red-500" : "border-[#0000002E]"
                   } rounded-[8px] p-[10.5px] font-['Work_Sans'] text-[14px] font-normal leading-[16.42px] outline-none w-full`}
+                  onBlur={() => clearErrors(`variants[${index}].field1`)}
                 />
                 {field1Error && (
                   <p className="absolute text-red-500 text-[12px] font-normal mt-1 left-0 top-full">
-                    {variantErrors[item.id]}
+                    {field1Error.message}
                   </p>
                 )}
               </div>
@@ -74,13 +67,10 @@ const Variants: React.FC<VariantProps> = ({
                 <MuiChipsInput
                   size="small"
                   variant="outlined"
-                  value={item.field2}
+                  value={variants?.[index]?.field2 || []}
                   onChange={(chips) => {
-                    handleFieldChange(item.id, "field2", chips);
-                    setVariantErrors((prev) => {
-                      const { [item.id]: removed, ...rest } = prev; // Clear errors for the current field
-                      return rest;
-                    });
+                    clearErrors(`variants[${index}].field2`);
+                    setValue(`variants[${index}].field2`, chips);
                   }}
                   sx={{
                     fontSize: "14px",
@@ -97,17 +87,12 @@ const Variants: React.FC<VariantProps> = ({
                         borderColor: field2Error ? "#F44336" : "#0000002E",
                       },
                     },
-                    "& .MuiInputLabel-root": {
-                      fontFamily: "'Work Sans', sans-serif",
-                      fontSize: "14px",
-                      fontWeight: "normal",
-                    },
                   }}
                   className="w-full"
                 />
                 {field2Error && (
                   <p className="absolute text-red-500 text-[12px] font-normal mt-1 left-0 top-full">
-                    {variantErrors[item.id]}
+                    {field2Error.message}
                   </p>
                 )}
               </div>
@@ -117,8 +102,18 @@ const Variants: React.FC<VariantProps> = ({
             <RiDeleteBinLine
               size={20}
               color="#EE2A2A"
+              style={index === 0 ? {opacity:"0"} : {}}
               className="cursor-pointer mt-4"
-              onClick={() => removeField(item.id)}
+              onClick={() => {
+                if (fields.length > 1) {
+                  remove(index);
+                } else {
+                  setError("variants", {
+                    type: "manual",
+                    message: "You must have at least one variant.",
+                  });
+                }
+              }}
             />
           </div>
         );
@@ -130,7 +125,7 @@ const Variants: React.FC<VariantProps> = ({
         <button
           type="button"
           className="font-['Work_Sans'] text-[#1F8CD0] text-[14px] font-medium text-left"
-          onClick={addNewField}
+          onClick={() => append({ field1: "", field2: [] })}
         >
           Add Option
         </button>
