@@ -29,7 +29,7 @@ const PriceInfo: React.FC = () => {
         />
         {errors.price && (
           <p className="font-['Work_Sans'] text-[#EE2A2A] text-[12px] font-normal leading-[16.42px] text-left">
-            {errors.price.message}
+            {String(errors.price.message)}
           </p>
         )}
       </label>
@@ -69,7 +69,7 @@ const PriceInfo: React.FC = () => {
         </div>
         {errors.discount && (
           <p className="font-['Work_Sans'] text-[#EE2A2A] text-[12px] font-normal leading-[16.42px] text-left">
-            {errors.discount.message}
+            {String(errors.discount.message)}
           </p>
         )}
       </label>

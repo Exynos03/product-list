@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { useFormContext, useFieldArray, FieldValues, FieldError } from "react-hook-form";
+import { useFormContext, useFieldArray } from "react-hook-form";
 import AntSwitch from "./AntSwitch";
 
 interface Variant {
-  field2: string[]; // Options for the variant
+  field2: string[]; 
 }
 
 interface Combination {
@@ -25,9 +25,9 @@ const combineArrays = (...arrays: string[][]): string[] => {
       acc.flatMap((accItem) =>
         currArray.map((currItem) => `${accItem}${accItem ? "/" : ""}${currItem}`)
       ),
-      [""] // Start with an empty string to handle the first combination properly
+      [""] 
     )
-    .filter((combination) => combination.trim() !== ""); // Remove empty combinations
+    .filter((combination) => combination.trim() !== ""); 
 };
 
 const Combinations: React.FC = () => {
@@ -43,7 +43,6 @@ const Combinations: React.FC = () => {
     name: "combinations",
   });
 
-  // Watch for variants and combinations
   const variants = watch("variants") ?? [];
   const combinations = watch("combinations") ?? [];
 

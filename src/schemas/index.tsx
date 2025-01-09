@@ -20,7 +20,7 @@ export const FormDataSchema = yup.object({
       'Discount must be greater than 0',
       (value) => !value || parseFloat(value) > 0
     ),
-  image: yup.mixed().required("Please upload image"),
+  image: yup.mixed().nullable().required("Please upload image"),
   variants: yup
     .array()
     .of(
@@ -31,6 +31,7 @@ export const FormDataSchema = yup.object({
           .of(yup.string().required("Value is required"))
           .min(1, "At least one value is required")
           .test('unique-field2', 'Values must be unique', function(value) {
+            if (!value) return true; 
             const uniqueValues = new Set(value);
             return uniqueValues.size === value.length;
           }),
@@ -41,6 +42,7 @@ export const FormDataSchema = yup.object({
       'unique-field1',
       'Values inside field1 must be unique',
       function(value) {
+        if (!value) return true; 
         const field1Values = value.map(item => item.field1);
         const uniqueField1Values = new Set(field1Values);
 

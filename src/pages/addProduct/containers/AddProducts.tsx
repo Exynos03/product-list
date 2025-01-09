@@ -55,7 +55,6 @@ const AddProducts: React.FC = () => {
     defaultValues: initialValues,
     mode: "onChange",
   });
-
   const { watch, trigger } = methods;
   const catList = localStorage.getItem("catList");
   const parsedCatList: string[] = catList ? JSON.parse(catList) : [];
@@ -85,7 +84,24 @@ const AddProducts: React.FC = () => {
     if (isValid) {
       const category = parsedCatList.map((item) => ({ id: 1, name: item }));
       const products = {
-        product: watch(),
+        product: {
+          name: watch().product_name,
+          category: watch().category,
+          brand: watch().brand_name,
+          image: watch().image?.[0]?.name,
+          priceInr: watch().price,
+          discount: {
+            method: watch().method,
+            value: watch().discount
+          },
+          variants: watch().variants.map( (variant) => ({
+            "name" : variant.field1,
+            "values": variant.field2
+          })),
+          combinations: watch().combinations.map( (item, index) => ({
+            [index+1]: item,
+          }))
+        },
         categories: category,
       };
       setProductJson(products);

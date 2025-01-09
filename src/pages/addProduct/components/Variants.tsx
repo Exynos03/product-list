@@ -4,6 +4,16 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
+interface Variant {
+  field1: string;
+  field2: string[];
+}
+
+interface FormValues {
+  variants: Variant[];
+}
+
+
 const Variants: React.FC = () => {
   const {
     control,
@@ -13,7 +23,7 @@ const Variants: React.FC = () => {
     clearErrors,
     watch,
     formState: { errors },
-  } = useFormContext();
+  } = useFormContext<FormValues>();
 
 
   const { fields, append, remove } = useFieldArray({
@@ -31,8 +41,8 @@ const Variants: React.FC = () => {
       </p>
 
       {fields.map((item, index) => {
-        const field1Error = errors?.variants?.[index]?.field1;
-        const field2Error = errors?.variants?.[index]?.field2;
+        const field1Error = (errors?.variants as any)?.[index]?.field1;
+        const field2Error = (errors?.variants as any)?.[index]?.field2;
 
         return (
           <div
@@ -44,13 +54,13 @@ const Variants: React.FC = () => {
               Option*
               <div className="relative w-full">
                 <input
-                  {...register(`variants[${index}].field1`)}
-                  defaultValue={item.field1} // Important to set default value for useFieldArray
+                  {...register(`variants[${index}].field1` as `variants.${number}.field1`) }
+                  defaultValue={item.field1 } // Important to set default value for useFieldArray
                   placeholder="Enter the option"
                   className={`border ${
                     field1Error ? "border-red-500" : "border-[#0000002E]"
                   } rounded-[8px] p-[10.5px] font-['Work_Sans'] text-[14px] font-normal leading-[16.42px] outline-none w-full`}
-                  onBlur={() => clearErrors(`variants[${index}].field1`)}
+                  onBlur={() => clearErrors(`variants[${index}].field1` as `variants.${number}.field1`)}
                 />
                 {field1Error && (
                   <p className="absolute text-red-500 text-[12px] font-normal mt-1 left-0 top-full">
@@ -69,8 +79,8 @@ const Variants: React.FC = () => {
                   variant="outlined"
                   value={variants?.[index]?.field2 || []}
                   onChange={(chips) => {
-                    clearErrors(`variants[${index}].field2`);
-                    setValue(`variants[${index}].field2`, chips);
+                    clearErrors(`variants[${index}].field2` as `variants.${number}.field2`);
+                    setValue(`variants[${index}].field2` as `variants.${number}.field2`, chips);
                   }}
                   sx={{
                     fontSize: "14px",

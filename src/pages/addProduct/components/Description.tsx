@@ -7,8 +7,8 @@ const Description: React.FC = () => {
     const {
       register,
       setValue,
-      setError,
       watch,
+      clearErrors ,
       formState: { errors },
     } = useFormContext();
   const formData = watch();
@@ -17,7 +17,7 @@ const Description: React.FC = () => {
     const file = e.target.files?.[0]; 
     if (file) {
       setValue("image", file); 
-      setError("image", null)
+      clearErrors("image")
     }
   };
 
@@ -42,7 +42,7 @@ const Description: React.FC = () => {
         />
         {errors.product_name && (
           <p className="font-['Work_Sans'] text-[#EE2A2A] text-[12px] font-normal leading-[16.42px] text-left">
-            {errors.product_name?.message}
+            {String(errors.product_name?.message)}
           </p>
         )}
       </label>
@@ -84,7 +84,7 @@ const Description: React.FC = () => {
         </div>
         {errors.category && (
           <p className="font-['Work_Sans'] text-[#EE2A2A] text-[12px] font-normal leading-[16.42px] text-left">
-            {errors.category?.message}
+            {String(errors.category?.message)}
           </p>
         )}
       </label>
@@ -100,7 +100,7 @@ const Description: React.FC = () => {
         />
         {errors.brand_name && (
           <p className="font-['Work_Sans'] text-[#EE2A2A] text-[12px] font-normal leading-[16.42px] text-left">
-            {errors.brand_name?.message}
+            {String(errors.brand_name?.message)}
           </p>
         )}
       </label>
@@ -117,9 +117,9 @@ const Description: React.FC = () => {
             {imageName ? imageName : "Upload Image"}
           </p>
         </div>
-        {errors.image && (
+        {errors.image?.message && (
           <p className="font-['Work_Sans'] text-[#EE2A2A] text-[12px] font-normal leading-[16.42px] text-left">
-            {errors.image?.message}
+            {String(errors.image?.message)}
           </p>
         )}
       </div>
